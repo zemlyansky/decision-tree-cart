@@ -180,3 +180,22 @@ export function zip(a, b) {
 
   return ret;
 }
+
+/**
+ * @private
+ * Recursively goes over node childs saving feature importances in arr
+ * @param {object} node
+ * @param {Array} arr
+ */
+export function aggregateImportances(node, arr) {
+  arr[node.splitColumn] +=
+    node.nSamples * node.impurity -
+    node.left.nSamples * node.left.impurity -
+    node.right.nSamples * node.right.impurity;
+  if (node.left && node.left.left) {
+    aggregateImportances(node.left, arr);
+  }
+  if (node.right && node.right.left) {
+    aggregateImportances(node.right, arr);
+  }
+}

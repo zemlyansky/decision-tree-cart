@@ -149,6 +149,9 @@ export default class TreeNode {
    * @param {number} parentGain - parent node gain or error.
    */
   train(X, y, currentDepth, parentGain) {
+    this.nSamples = X.rows;
+    this.impurity = Utils.giniImpurity(y);
+
     if (X.rows <= this.minNumSamples) {
       this.calculatePrediction(y);
       return;
@@ -244,5 +247,27 @@ export default class TreeNode {
         this.right.setNodeParameters(node.right);
       }
     }
+  }
+
+  /**
+   * Calculates feature importances
+   * @param {boolean} normalize
+   * @return {Array} featureImportances
+   */
+  computeFeatureImportances(n) {
+    let importances = Array(n).fill(0)
+    aggregateImportances(this, importances)
+    for (let i = 0; i < importances.length; ++i) {
+      importances[i] /= this.nSamples
+    }
+    let normalizer = importances.reduce(function(a, b) {
+      return a + b
+    }, 0)
+    if (normalizer > 0) {
+      for (let i = 0; i < importances.length; ++i) {
+        importances[i] /= normalizer
+      }
+    }
+    return importances
   }
 }

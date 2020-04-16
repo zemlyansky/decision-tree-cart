@@ -37,6 +37,7 @@ export class DecisionTreeRegression {
    */
   train(trainingSet, trainingValues) {
     this.root = new Tree(this.options);
+    this.nFeatures = trainingSet[0].length
 
     if (
       typeof trainingSet[0] !== 'undefined' &&
@@ -94,5 +95,13 @@ export class DecisionTreeRegression {
     }
 
     return new DecisionTreeRegression(true, model);
+  }
+
+  /**
+   * Calculates feature importances
+   * @return {Array} featureImportances
+   */
+  get featureImportances() {
+    return this.root.computeFeatureImportances(this.nFeatures)
   }
 }

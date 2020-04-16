@@ -38,6 +38,7 @@ export class DecisionTreeClassifier {
    */
   train(trainingSet, trainingLabels) {
     this.root = new Tree(this.options);
+    this.nFeatures = trainingSet[0].length
     trainingSet = Matrix.checkMatrix(trainingSet);
     this.root.train(trainingSet, trainingLabels, 0, null);
   }
@@ -83,5 +84,13 @@ export class DecisionTreeClassifier {
     }
 
     return new DecisionTreeClassifier(true, model);
+  }
+
+  /**
+   * Calculates feature importances
+   * @return {Array} featureImportances
+   */
+  get featureImportances() {
+    return this.root.computeFeatureImportances(this.nFeatures)
   }
 }
