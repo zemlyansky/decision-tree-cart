@@ -256,7 +256,7 @@ export default class TreeNode {
    */
   computeFeatureImportances(n) {
     let importances = Array(n).fill(0)
-    aggregateImportances(this, importances)
+    Utils.aggregateImportances(this, importances)
     for (let i = 0; i < importances.length; ++i) {
       importances[i] /= this.nSamples
     }
